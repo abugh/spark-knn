@@ -45,11 +45,11 @@ case class SparkEmbeddingKNN(embeddingMapMain: Dataset[Embedding], embeddingMapC
   def getSimilarity(embeddingMap: Map[String, BreezeVec[Double]], embeddingMapCandidate: Map[String, BreezeVec[Double]], scoreLowBound: Double): Map[String, Seq[(String, Double)]] = {
     val embeddingIds = embeddingMap.map(_._1).toArray
     val embeddingCandidateIds = embeddingMapCandidate.map(_._1).toArray
-    embeddingIds.par.flatMap { id =>
-      (id, embeddingCandidateIds.map{id_candidate =>
+    embeddingIds.map { id =>
+      (id, embeddingCandidateIds.map{ id_candidate =>
         (id_candidate, cosineSimilarity(embeddingMap(id), embeddingMapCandidate(id_candidate)))
       }.seq.filter(_._2 > scoreLowBound))
-    }.toMap
+    }.seq.toMap
   }
 
   def rankByVideo(similaritySeq: Seq[(String, Double)], maxRank: Int): Seq[(String, Double)] = {
