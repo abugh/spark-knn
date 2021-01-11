@@ -13,7 +13,7 @@ Originally Faiss can't run on Spark. But by using our method, we can combine the
 
 ### Usage
 You can just copy our codes and find a proper position to paste it in your project.
-See details in example.scala .
+See details in example.scala and comments in code.
 
 ### Architecture
 ![Architecture](Architecture.png "Architecture")

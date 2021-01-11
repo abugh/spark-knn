@@ -9,6 +9,13 @@ case class Embedding(id: String, vector: Seq[Double])
 
 case class EmbeddingMatchPair(id: String, id_candidate: String, score: Double, rank: Int)
 
+
+"""
+  Interface function
+  @param embeddingMapMain: Main embedding map. We will find k candidates for each item in embeddingMapMain.
+  @param embeddingMapCandidates: Candidate embedding map. Candidates are from this embedding map.
+  @param sameEmbedding: indicates whether the 2 embedings are the same embedding. If the same , we need to filter out the item itself in candidates.
+"""
 case class SparkEmbeddingKNN(embeddingMapMain: Dataset[Embedding], embeddingMapCandidates: Dataset[Embedding], sameEmbedding: Boolean = true) {
   def partitionEmbedding(partitionNum: Int)(embedding: Dataset[Embedding]): DataFrame= {
     embedding
@@ -89,7 +96,14 @@ case class SparkEmbeddingKNN(embeddingMapMain: Dataset[Embedding], embeddingMapC
         .toSet
         .toSeq
   }
-
+  """
+    Interface function
+    @param topK: the number of candidates return for each item in embeddingMain
+    @param partitionNum: number of partitions to split the whole embedding dataset
+    @param udfType: type of udf
+    @param explicitUdf: you can input your own udf to fasten the process. Implementation can refer to defaultKnnUdf.
+    @param scoreLowBound: embedding pairs under scoreLowBound will be dismissed. The score is Cosine Similarity.
+  """
   def getKnnByPartitionUDF(topK: Int, partitionNum: Int = 200, udfType: String = "exlicit", explicitUdf: UserDefinedFunction = defaultKnnUdf, scoreLowBound: Double = 0.5): Dataset[EmbeddingMatchPair] = {
     val partitionedMain = embeddingMapMain.transform(partitionEmbedding(partitionNum))
     val partitionedCandidates = embeddingMapCandidates.transform(partitionEmbedding(partitionNum))
