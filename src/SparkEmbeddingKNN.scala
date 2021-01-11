@@ -12,9 +12,9 @@ case class EmbeddingMatchPair(id: String, id_candidate: String, score: Double, r
 
 """
   Interface function
-  @param embeddingMapMain: Main embedding map. We will find k candidates for each item in embeddingMapMain.
+  @param embeddingMapMain: Main embedding map. We will find k candidates for each item in embeddingMapMain. Need to transfer the type to Dataset[Embedding].
   @param embeddingMapCandidates: Candidate embedding map. Candidates are from this embedding map.
-  @param sameEmbedding: indicates whether the 2 embedings are the same embedding. If the same , we need to filter out the item itself in candidates.
+  @param sameEmbedding: indicates whether the 2 embedings are the same embedding. If the same , we need to filter out the item itself in candidates. Need to transfer the type to Dataset[Embedding].
 """
 case class SparkEmbeddingKNN(embeddingMapMain: Dataset[Embedding], embeddingMapCandidates: Dataset[Embedding], sameEmbedding: Boolean = true) {
   def partitionEmbedding(partitionNum: Int)(embedding: Dataset[Embedding]): DataFrame= {

@@ -12,7 +12,8 @@ Our method provides a interface for users to utilize faster KNN algorithm on loc
 Originally Faiss can't run on Spark. But by using our method, we can combine the advantages of both Spark and Faiss.
 
 ### Usage
-You can just copy our codes and find a proper position to paste it in your project.
+You can add the `.jar` to your dependent libraries, and then import the SparkEmbeddingKNN object in your code.
+Or you can just copy our codes and find a proper position to paste it in your project.
 See details in example.scala and comments in code.
 
 ### Architecture
