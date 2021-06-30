@@ -62,6 +62,7 @@ case class SparkEmbeddingKNN(embeddingMapMain: Dataset[Embedding], embeddingMapC
   def rankByVideo(similaritySeq: Seq[(String, Double)], maxRank: Int): Seq[(String, Double)] = {
     similaritySeq
       .sortBy(_._2)
+      .reverse
       .take(maxRank)
   }
 
